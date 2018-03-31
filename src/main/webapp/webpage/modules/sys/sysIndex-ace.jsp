@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
-    <title>基础平台</title>
+    <title>权限管理系统</title>
 
 	<%@ include file="/webpage/include/acehead.jsp"%>
 	<script src="${ctxStatic}/common/inspinia-ace.js?v=3.2.0"></script>
@@ -41,7 +41,7 @@
 					<a href="#" class="navbar-brand">
 						<small>
 							<i class="fa fa-leaf"></i>
-							基础平台
+							权限管理系统
 						</small>
 					</a>
 

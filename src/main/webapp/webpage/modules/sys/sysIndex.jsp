@@ -8,13 +8,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
-    <title>基础平台</title>
+    <title>权限管理系统</title>
 
 	<%@ include file="/webpage/include/head.jsp"%>
 	<script src="${ctxStatic}/common/inspinia.js?v=3.2.0"></script>
 	<script src="${ctxStatic}/common/contabs.js"></script> 
-    <meta name="keywords" content="基础开发平台">
-    <meta name="description" content="基础开发平台，采用spring mvc+mybatis+shiro+bootstrap的快速开发平台">
+    <meta name="keywords" content="权限管理系统">
+    <meta name="description" content="权限管理系统，采用spring mvc+mybatis+shiro+bootstrap的权限管理系统">
     <script type="text/javascript">
 	$(document).ready(function() {
 		 if('${fns:getDictLabel(cookie.theme.value,'theme','默认主题')}' == '天蓝主题'){

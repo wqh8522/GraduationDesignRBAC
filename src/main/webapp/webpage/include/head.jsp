@@ -16,7 +16,7 @@
 <script src="${ctxStatic}/jquery-validation/1.14.0/localization/messages_zh.min.js" type="text/javascript"></script>
 <link href="${ctxStatic}/jquery-jbox/2.3/Skins/Bootstrap/jbox.min.css" rel="stylesheet" />
 <script src="${ctxStatic}/jquery-jbox/2.3/jquery.jBox-2.3.min.js" type="text/javascript"></script>
-<script src="${ctxStatic}/My97DatePicker/WdatePicker.js" type="text/javascript"></script>
+<%--<script src="${ctxStatic}/My97DatePicker/WdatePicker.js" type="text/javascript"></script>--%>
 <script src="${ctxStatic}/pace/pace.min.js"></script>
 <script src="${ctxStatic}/metisMenu/jquery.metisMenu.js"></script>
 <link href="${ctxStatic}/iCheck/custom.css" rel="stylesheet" />

@@ -28,9 +28,6 @@
 <script src="${ctxStatic}/fullcalendar/js/fullcalendar.js"></script>
 <meta name="decorator" content="default"/>
 
-
-
-
 <!--
 	说明：需要整合农历节气和节日，引入fullcalendar.js fullcalendar2.css
 	不需要则引入：fullcalendar.min.js fullcalendar.css
@@ -48,26 +45,26 @@ $(function() {
 		},
 		firstDay:1,//每行第一天为周一 
         editable: true,//启用拖动 
-		events: '${ctx}/iim/myCalendar/findList',
+		events: '${ctx}/sys/myCalendar/findList',
 		//点击某一天时促发
 		dayClick: function(date, allDay, jsEvent, view) {
 			var selDate =$.fullCalendar.formatDate(date,'yyyy-MM-dd');
 			$.fancybox({
 				'type':'ajax',
-				'href':'${ctx}/iim/myCalendar/addform?date='+selDate
+				'href':'${ctx}/sys/myCalendar/addform?date='+selDate
 			});
     	},
 		//单击事件项时触发 
         eventClick: function(calEvent, jsEvent, view) { 
            $.fancybox({ 
                 'type':'ajax', 
-                'href':'${ctx}/iim/myCalendar/editform?id='+calEvent.id 
+                'href':'${ctx}/sys/myCalendar/editform?id='+calEvent.id
            }); 
         },
 		
 		//拖动事件 
 		eventDrop: function(event,dayDelta,minuteDelta,allDay,revertFunc) { 
-        	$.post("${ctx}/iim/myCalendar/drag",{id:event.id,daydiff:dayDelta, minudiff:minuteDelta,allday:allDay},function(msg){ 
+        	$.post("${ctx}/sys/myCalendar/drag",{id:event.id,daydiff:dayDelta, minudiff:minuteDelta,allday:allDay},function(msg){
             	if(msg!=1){ 
                 	alert(msg); 
                 	revertFunc(); //恢复原状 
@@ -77,7 +74,7 @@ $(function() {
 		
 		//日程事件的缩放
 		eventResize: function(event,dayDelta,minuteDelta,revertFunc) { 
-    		$.post("${ctx}/iim/myCalendar/resize",{id:event.id,daydiff:dayDelta,minudiff:minuteDelta},function(msg){ 
+    		$.post("${ctx}/sys/myCalendar/resize",{id:event.id,daydiff:dayDelta,minudiff:minuteDelta},function(msg){
         		if(msg!=1){ 
             		alert(msg); 
             		revertFunc(); 
@@ -91,7 +88,7 @@ $(function() {
 	    	var end =$.fullCalendar.formatDate(endDate,'yyyy-MM-dd'); 
 	    	$.fancybox({ 
 	        	'type':'ajax', 
-	        	'href':'${ctx}/iim/myCalendar/addform?date='+start+'&end='+end 
+	        	'href':'${ctx}/sys/myCalendar/addform?date='+start+'&end='+end
 	    	}); 
 		} 
 	});
@@ -109,192 +106,6 @@ $('#todotab a').click(function (e) {
     
         <div class="row animated fadeInDown">
 
-			<div class="col-sm-6">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>待办事项 </h5>
-                    </div>
-                    <div class="ibox-content" style="height:300px;">
-						<div>
-						  <ul class="nav nav-tabs" role="tablist">
-						    <li role="presentation" class="active"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">待办 <span class="badge" style="color:white;background-color:red;">${todocount }</span></a></li>
-						    <li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">通知</a></li>
-						    <li role="presentation"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">消息 <span class="badge" style="color:white;background-color:red;">${msgcount }</span></a></li>
-						  </ul>
-						
-						  <div class="tab-content">
-						    <div role="tabpanel" class="tab-pane active" id="tab1" style="padding-bottom:20px;">
-						    	<table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTables-example dataTable">
-									<thead>
-										<tr>
-											<th> <input type="checkbox" class="i-checks"></th>
-											<th  class="sort-column title">标题</th>
-											<th  class="sort-column currStatus">当前状态</th>
-											<th  class="sort-column createTime">创建时间</th>
-											<th>操作</th>
-										</tr>
-									</thead>
-									<tbody>
-									<c:forEach items="${todopage.list}" var="todo">
-										<tr>
-											<td> <input type="checkbox" id="${todo.id}" class="i-checks"></td>
-											<td>
-												<a  href="${ctx}/sys/todo/deal?id=${todo.id}">
-													<c:if test="${todo.isRead == 0}"><div style="width:8px;height:8px;margin-top:5px;border-radius:100%;background-color:red;float:left;"></div></c:if>${todo.title}
-												</a>
-											</td>
-											<td>
-												${todo.currStatus}
-											</td>
-											<td>
-												<fmt:formatDate value="${todo.createDate}" type="both" dateStyle="full" pattern="yyyy-MM-dd HH:mm:ss"/>
-											</td>
-											<td>
-												<shiro:hasPermission name="sys:todo:edit">
-							    					<a href="${ctx}/sys/todo/deal?id=${todo.id}" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 处理</a>
-							    				</shiro:hasPermission>
-											</td>
-										</tr>
-									</c:forEach>
-									</tbody>
-								</table>
-								
-									<!-- 分页代码 -->
-								<table:page page="${todopage}"></table:page>
-						    </div>
-						    <div role="tabpanel" class="tab-pane" id="tab2" style="padding-bottom:20px;">
-						    	<table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTables-example dataTable">
-									<thead>
-										<tr>
-											<th> <input type="checkbox" class="i-checks"></th>
-											<th  class="sort-column title">标题</th>
-											<th  class="sort-column is_top">创建人</th>
-											<th  class="sort-column is_top">创建时间</th>
-										</tr>
-									</thead>
-									<tbody>
-									<c:forEach items="${noticepage.list}" var="notice">
-										<tr>
-											<td> <input type="checkbox" id="${notice.id}" class="i-checks"></td>
-											<td>
-												<a  href="${ctx}/sys/notice/view?id=${notice.id}">
-													${notice.title}
-												</a>
-											</td>
-											<td>
-												${notice.createBy.name}
-											</td>
-											<td>
-												<fmt:formatDate value="${notice.createDate}" type="both" dateStyle="full"/>
-											</td>
-										</tr>
-									</c:forEach>
-									</tbody>
-								</table>
-								
-									<!-- 分页代码 -->
-								<table:page page="${noticepage}"></table:page>
-						    </div>
-						    <div role="tabpanel" class="tab-pane" id="tab3" style="padding-bottom:20px;">
-						    	<table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTables-example dataTable">
-									<thead>
-										<th> <input type="checkbox" class="i-checks"></th>
-										<th  class="sort-column msgType">消息类型</th>
-										<th  class="sort-column msgContent">消息内容</th>
-										<th>操作</th>
-									</thead>
-									<tbody>
-									<c:forEach items="${msgpage.list}" var="tMsg">
-										<tr>
-											<td> <input type="checkbox" id="${tMsg.id}" class="i-checks"></td>
-											<td>
-												${fns:getDictLabel(tMsg.msgType, 'sys_msg_type', "无")}
-											</td>
-											<td>
-												<c:if test="${tMsg.isRead == 0}"><div style="width:8px;height:8px;margin-top:5px;border-radius:100%;background-color:red;float:left;"></div></c:if>${tMsg.msgContent}
-											</td>
-											<td>
-												<a href="${ctx}/sys/tMsg/deal?id=${tMsg.id}" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 处理</a>
-											</td>
-										</tr>
-									</c:forEach>
-									</tbody>
-								</table>
-								
-									<!-- 分页代码 -->
-								<table:page page="${msgpage}"></table:page>
-						    </div>
-						  </div>
-						
-						</div>
-                    </div>
-                </div>
-            </div>
-			
-            
-            <div class="col-sm-6">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>图文新闻 </h5>
-                    </div>
-                    <div class="ibox-content">
-						<div>
-						  <ul class="nav nav-tabs" role="tablist">
-						 
-						  <c:forEach items="${fns:getDictList('sys_notice_column')}" var="tab" varStatus="status">
-						  <li role="presentation" <c:if test="${status.index==0 }"> class="active"</c:if>  ><a href="#tab${status.index+5}" aria-controls="tab${status.index+5}" role="tab" data-toggle="tab">${tab.label }</a></li>
-						  </c:forEach>
-						  </ul>
-						  
-						  
-						 
-						  <div class="tab-content">
-						  	<c:forEach items="${tabpage}" var="tablist" varStatus="status">
-						  
-						    <div role="tabpanel" class="tab-pane <c:if test="${status.index==0 }"> active</c:if>" id="tab${status.index+5}" style="padding-bottom:20px;">
-						    	<table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTables-example dataTable">
-									<thead>
-										<tr>
-											<th> <input type="checkbox" class="i-checks"></th>
-											<th  class="sort-column title">标题</th>
-											<th  class="sort-column is_top">创建人</th>
-											<th  class="sort-column is_top">创建时间</th>
-										</tr>
-									</thead>
-									<tbody>
-									<c:forEach items="${tablist.list}" var="notice">
-										<tr>
-											<td> <input type="checkbox" id="${notice.id}" class="i-checks"></td>
-											<td>
-												<a  href="${ctx}/sys/notice/view?id=${notice.id}">
-													${notice.title}
-												</a>
-											</td>
-											<td>
-												${notice.createBy.name}
-											</td>
-											<td>
-												<fmt:formatDate value="${notice.createDate}" type="both" dateStyle="full"/>
-											</td>
-										</tr>
-									</c:forEach>
-									</tbody>
-								</table>
-									<!-- 分页代码 -->
-								<table:page page="${tablist}"></table:page>
-						    </div>
-						 </c:forEach>
-						    
-						    
-						    
-						    
-						    
-						  </div>
-						</div>
-                    </div>
-                </div>
-            </div>
-			
             <div class="col-sm-6">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
