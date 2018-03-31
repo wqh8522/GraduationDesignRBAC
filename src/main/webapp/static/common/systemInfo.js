@@ -167,7 +167,7 @@ $(function() {
 		var cpu = [];
 		$.ajax({
 			type : "POST",
-			url : locat + '/a/monitor/usage',
+			url : locat + '/monitor/usage',
 			async : false,
 			dataType : 'json',
 			success : function(json) {
