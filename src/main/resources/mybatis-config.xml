@@ -41,17 +41,17 @@
 
     <!-- 类型别名 -->
     <typeAliases>
-        <typeAlias alias="Page" type="com.jeeplus.common.persistence.Page"/><!--分页  -->
+        <typeAlias alias="Page" type="com.wqh.common.persistence.Page"/><!--分页  -->
     </typeAliases>
 
     <typeHandlers>
-        <typeHandler handler="com.jeeplus.common.mapper.ConvertBlobTypeHandler"
+        <typeHandler handler="com.wqh.common.mapper.ConvertBlobTypeHandler"
                      javaType="java.lang.String" jdbcType="BLOB"/>
     </typeHandlers>
 
     <!-- 插件配置 -->
     <plugins>
-        <plugin interceptor="com.jeeplus.common.persistence.interceptor.PaginationInterceptor"/>
+        <plugin interceptor="com.wqh.common.persistence.interceptor.PaginationInterceptor"/>
     </plugins>
 
 </configuration>

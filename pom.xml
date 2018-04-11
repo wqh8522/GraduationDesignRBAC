@@ -564,14 +564,6 @@
         <artifactId>sigar</artifactId>
         <version>1.6.4</version>
       </dependency>
-      <!--代码生成-->
-      <dependency>
-        <groupId>gencode</groupId>
-        <artifactId>gencode</artifactId>
-        <version>1.0</version>
-        <systemPath>${lib.path}/org.jeeframework.gencode-1.5.jar</systemPath>
-        <scope>system</scope>
-      </dependency>
       <!-- Echarts图表依赖包开始 -->
       <!-- https://mvnrepository.com/artifact/com.github.abel533/ECharts -->
       <dependency>

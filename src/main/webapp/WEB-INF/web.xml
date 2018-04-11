@@ -7,7 +7,7 @@
     <param-value>classpath:spring-context*.xml</param-value>
   </context-param>
   <listener>
-    <listener-class>com.jeeplus.modules.sys.listener.WebContextListener</listener-class>
+    <listener-class>com.wqh.modules.sys.listener.WebContextListener</listener-class>
   </listener>
   <listener>
     <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
@@ -70,7 +70,7 @@
     <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
     <init-param>
       <param-name>org.restlet.application</param-name>
-      <param-value>com.jeeplus.modules.act.rest.ActRestApplication</param-value>
+      <param-value>com.wqh.modules.act.rest.ActRestApplication</param-value>
     </init-param>
   </servlet>
 
@@ -92,7 +92,7 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>UserfilesDownloadServlet</servlet-name>
-    <servlet-class>com.jeeplus.common.servlet.UserfilesDownloadServlet</servlet-class>
+    <servlet-class>com.wqh.common.servlet.UserfilesDownloadServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>UserfilesDownloadServlet</servlet-name>
@@ -100,7 +100,7 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>ValidateCodeServlet</servlet-name>
-    <servlet-class>com.jeeplus.common.servlet.ValidateCodeServlet</servlet-class>
+    <servlet-class>com.wqh.common.servlet.ValidateCodeServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ValidateCodeServlet</servlet-name>

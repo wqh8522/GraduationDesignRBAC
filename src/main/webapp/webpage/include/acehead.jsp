@@ -105,6 +105,8 @@
 <link rel="stylesheet" type="text/css" href="${ctxStatic}/webuploader-0.1.5/webuploader.css">
 <script type="text/javascript" src="${ctxStatic}/webuploader-0.1.5/webuploader.js"></script>
 
+<link href="${ctxStatic}/jquery-jbox/2.3/Skins/Bootstrap/jbox.min.css" rel="stylesheet" />
+<script src="${ctxStatic}/jquery-jbox/2.3/jquery.jBox-2.3.min.js" type="text/javascript"></script>
 
 <!-- 引入自定义文件 -->
 <script src="${ctxStatic}/common/mustache.min.js" type="text/javascript"></script>
