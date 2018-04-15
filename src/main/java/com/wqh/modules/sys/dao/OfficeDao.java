@@ -20,4 +20,6 @@ public interface OfficeDao extends TreeDao<Office> {
 	public Office getByCode(String code);
 	
 	public List<Office> getByCodes(@Param("code")String code);
+
+	public Office getByName(String name);
 }

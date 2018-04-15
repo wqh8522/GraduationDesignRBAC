@@ -166,7 +166,15 @@ public class UserController extends BaseController {
 		model.addAttribute("allRoles", systemService.findAllRole());
 		return "modules/sys/user/userRoleset";
 	}
-	
+
+	/**
+	 * 保存角色
+	 * @param user
+	 * @param request
+	 * @param model
+	 * @param redirectAttributes
+	 * @return
+	 */
 	@RequiresPermissions("sys:user:roleset")
 	@RequestMapping(value = "saverole")
 	public String saveRole(User user, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
@@ -192,6 +200,14 @@ public class UserController extends BaseController {
 		return "redirect:" + adminPath + "/sys/user/list?repage";
 	}
 
+	/**
+	 * 保存用户
+	 * @param user
+	 * @param request
+	 * @param model
+	 * @param redirectAttributes
+	 * @return
+	 */
 	@RequiresPermissions(value={"sys:user:add","sys:user:edit"},logical=Logical.OR)
 	@RequestMapping(value = "save")
 	public String save(User user, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
@@ -235,7 +251,14 @@ public class UserController extends BaseController {
 		addMessage(redirectAttributes, "保存用户'" + user.getLoginName() + "'成功");
 		return "redirect:" + adminPath + "/sys/user/list?repage";
 	}
-	
+
+	/**
+	 * 批量删除
+	 * @param user
+	 * @param request
+	 * @param redirectAttributes
+	 * @return
+	 */
 	@RequiresPermissions("sys:user:del")
 	@RequestMapping(value = "delete")
 	public String delete(User user, HttpServletRequest request, RedirectAttributes redirectAttributes) {
@@ -318,7 +341,7 @@ public class UserController extends BaseController {
 			for (User user : list){
 				try{
 					if ("true".equals(checkLoginName("", user.getLoginName()))){
-						user.setPassword(SystemService.entryptPassword("123456"));
+						user.setPassword(SystemService.entryptPassword("111111"));
 						BeanValidators.validateWithException(validator, user);
 						systemService.saveUser(user);
 						successNum++;
@@ -344,82 +367,82 @@ public class UserController extends BaseController {
 		} catch (Exception e) {
 			addMessage(redirectAttributes, "导入用户失败！失败信息："+e.getMessage());
 		}
-		return "redirect:" + adminPath + "/sys/user/index?repage";
+		return "redirect:" + adminPath + "/sys/user/list?repage";
     }
 	
 	
 	/**
 	 * 导入Excel数据
 	 */
-	@RequiresPermissions("sys:user:import2")
-    @RequestMapping(value = "import2", method=RequestMethod.POST)
-    public String importFile2(MultipartFile file, RedirectAttributes redirectAttributes) {
-		try {
-			int successNum = 0;
-			int failureNum = 0;
-			StringBuilder failureMsg = new StringBuilder();
-			ImportExcel ei = new ImportExcel(file, 1, 0);
-			List<String[]> list = new ArrayList<String[]>();
-			
-			int hs = ei.getLastDataRowNum();
-			for (int i = 2; i < hs; i++) {
-				
-				Object no = ei.getCellValue(ei.getRow(i), 0);
-				Object codes = ei.getCellValue(ei.getRow(i), 1);
-				if(no==null || "".equals(no)||codes==null || "".equals(codes)){
-					failureNum++;
-					continue;
-				}
-				String[] objs = {no.toString(),codes.toString()};
-				
-				list.add(objs);
-			}
-			
-			for (String[] objs : list){
-				try{
-					System.out.println(objs);
-					 User user =  userDao.findUniqueByProperty("no", objs[0]);
-					 if(user==null){
-						failureNum++;
-						continue; 
-					 }
-					 String codes = "'"+objs[1]+"'";
-					 codes = codes.replaceAll(";", "','");
-					 System.out.println(codes);
-					 List<Office> offcies = OfficeService.getByCodes(objs[1].replaceAll(";", ","));
-					System.out.println(offcies+"00000000000000000000000000000");
-					 if(CollectionUtils.isEmpty(offcies)){
-						 failureNum++;
-							continue;
-					 }
-					 String ids = "";
-					 String names = "";
-					 for(Office o : offcies){System.out.println(o);
-						  ids = ids+o.getId()+",";
-						  names = names+o.getName()+",";
-					 }
-					 user.setOtherOrgIds(ids.substring(0,ids.length()-1));
-					 user.setOtherOrgNames(names.substring(0,names.length()-1));
-					 userDao.updateUserInfo(user);
-					successNum++;
-				}catch(ConstraintViolationException ex){
-					failureNum++;
-					System.out.println("1"+ex);
-				}catch (Exception ex) {
-					failureNum++;
-					System.out.println("2"+ex);
-				}
-			}
-			if (failureNum>0){
-				failureMsg.insert(0, "，失败 "+failureNum+" 条问卷试题记录。");
-			}
-			addMessage(redirectAttributes, "已成功导入 "+successNum+" 条问卷试题记录"+failureMsg);
-		} catch (Exception e) {
-			addMessage(redirectAttributes, "导入问卷试题失败！失败信息："+e.getMessage());
-			e.printStackTrace();
-		}
-		return "redirect:" + adminPath + "/sys/user/list?repage";
-    }
+//	@RequiresPermissions("sys:user:import2")
+//    @RequestMapping(value = "import2", method=RequestMethod.POST)
+//    public String importFile2(MultipartFile file, RedirectAttributes redirectAttributes) {
+//		try {
+//			int successNum = 0;
+//			int failureNum = 0;
+//			StringBuilder failureMsg = new StringBuilder();
+//			ImportExcel ei = new ImportExcel(file, 1, 0);
+//			List<String[]> list = new ArrayList<String[]>();
+//
+//			int hs = ei.getLastDataRowNum();
+//			for (int i = 2; i < hs; i++) {
+//
+//				Object no = ei.getCellValue(ei.getRow(i), 0);
+//				Object codes = ei.getCellValue(ei.getRow(i), 1);
+//				if(no==null || "".equals(no)||codes==null || "".equals(codes)){
+//					failureNum++;
+//					continue;
+//				}
+//				String[] objs = {no.toString(),codes.toString()};
+//
+//				list.add(objs);
+//			}
+//
+//			for (String[] objs : list){
+//				try{
+//					System.out.println(objs);
+//					 User user =  userDao.findUniqueByProperty("no", objs[0]);
+//					 if(user==null){
+//						failureNum++;
+//						continue;
+//					 }
+//					 String codes = "'"+objs[1]+"'";
+//					 codes = codes.replaceAll(";", "','");
+//					 System.out.println(codes);
+//					 List<Office> offcies = OfficeService.getByCodes(objs[1].replaceAll(";", ","));
+//					System.out.println(offcies+"00000000000000000000000000000");
+//					 if(CollectionUtils.isEmpty(offcies)){
+//						 failureNum++;
+//							continue;
+//					 }
+//					 String ids = "";
+//					 String names = "";
+//					 for(Office o : offcies){System.out.println(o);
+//						  ids = ids+o.getId()+",";
+//						  names = names+o.getName()+",";
+//					 }
+//					 user.setOtherOrgIds(ids.substring(0,ids.length()-1));
+//					 user.setOtherOrgNames(names.substring(0,names.length()-1));
+//					 userDao.updateUserInfo(user);
+//					successNum++;
+//				}catch(ConstraintViolationException ex){
+//					failureNum++;
+//					System.out.println("1"+ex);
+//				}catch (Exception ex) {
+//					failureNum++;
+//					System.out.println("2"+ex);
+//				}
+//			}
+//			if (failureNum>0){
+//				failureMsg.insert(0, "，失败 "+failureNum+" 条问卷试题记录。");
+//			}
+//			addMessage(redirectAttributes, "已成功导入 "+successNum+" 条问卷试题记录"+failureMsg);
+//		} catch (Exception e) {
+//			addMessage(redirectAttributes, "导入问卷试题失败！失败信息："+e.getMessage());
+//			e.printStackTrace();
+//		}
+//		return "redirect:" + adminPath + "/sys/user/list?repage";
+//    }
 	
 	/**
 	 * 下载导入用户数据模板

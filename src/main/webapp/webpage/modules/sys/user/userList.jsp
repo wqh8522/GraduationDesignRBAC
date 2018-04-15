@@ -23,21 +23,15 @@
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<table:sortColumn id="orderBy" name="orderBy" value="${page.orderBy}" callback="sortOrRefresh();"/><!-- 支持排序 -->
 		<div class="form-group">
-		
+			<span>姓&nbsp;&nbsp;名：</span>
+			<form:input path="name" htmlEscape="false" maxlength="50" class=" form-control input-sm"/>
 			<span>工号/学号：</span>
 				<form:input path="no" htmlEscape="false" maxlength="50" class=" form-control input-sm"/>
-			
 			<span>账号：</span>
 				<form:input path="loginName" htmlEscape="false" maxlength="50" class=" form-control input-sm"/>
-				
 			<span>  归属机构：</span>
-				<sys:treeselect id="office" name="office.id" value="${user.office.id}" labelName="office.name" labelValue="${user.office.name}" 
+				<sys:treeselect id="office" cssStyle="width:150px" name="office.id" value="${user.office.id}" labelName="office.name" labelValue="${user.office.name}"
 				title="部门" url="/sys/office/treeData?type=2" cssClass=" form-control input-sm" allowClear="true" notAllowSelectParent="false"/>
-			<br><br>
-			
-			<span>姓&nbsp;&nbsp;名：</span>
-				<form:input path="name" htmlEscape="false" maxlength="50" class=" form-control input-sm"/>
-		
 		</div>
 	
 	</form:form>
@@ -66,7 +60,7 @@
 	       		<table:exportExcel url="${ctx}/sys/user/export"></table:exportExcel><!-- 导出按钮 -->
 	       </shiro:hasPermission>
 	       <shiro:hasPermission name="sys:user:roleset">
-				<table:roleset url="${ctx}/sys/user/roleform" id="contentTable" title="设置角色"></table:roleset><!-- 角色设置 -->	       
+				<table:roleset url="${ctx}/sys/user/roleform" id="contentTable" title="设置角色" width="300px" ></table:roleset><!-- 角色设置 -->
 			</shiro:hasPermission>
 	       <button class="btn btn-white btn-sm " data-toggle="tooltip" data-placement="left" onclick="sortOrRefresh()" title="刷新"><i class="glyphicon glyphicon-repeat"></i> 刷新</button>
 		
@@ -112,6 +106,10 @@
 					</shiro:hasPermission>
 					<shiro:hasPermission name="sys:user:del">
 						<a href="${ctx}/sys/user/delete?id=${user.id}" onclick="return confirmx('确认要删除该用户吗？', this.href)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> 删除</a>
+					</shiro:hasPermission>
+					<shiro:hasPermission name="sys:user:roleset">
+						<a href="#" onclick="openDialog('设置角色', '${ctx}/sys/user/roleform?id=${user.id}','300px', '500px')" class="btn btn-warning btn-xs" ><i class="fa fa-users"></i> 设置角色</a>
+
 					</shiro:hasPermission>
 				</td>
 			</tr>

@@ -86,7 +86,7 @@
 						<a href="${ctx}/sys/role/delete?id=${role.id}" onclick="return confirmx('确认要删除该角色吗？', this.href)" class="btn  btn-danger btn-xs"><i class="fa fa-trash"></i> 删除</a>
 						</shiro:hasPermission>
 						<shiro:hasPermission name="sys:role:assign"> 
-						<a href="#" onclick="openDialog('菜单设置', '${ctx}/sys/role/auth?id=${role.id}','350px', '600px')" class="btn btn-primary btn-xs" ><i class="fa fa-edit"></i> 菜单设置</a> 
+						<a href="#" onclick="openDialog('权限设置', '${ctx}/sys/role/auth?id=${role.id}','350px', '600px')" class="btn btn-primary btn-xs" ><i class="fa fa-edit"></i> 权限设置</a>
 						</shiro:hasPermission>
 						<shiro:hasPermission name="sys:role:assign"> 
 							<c:if test="${(role.createBy.id eq fns:getUser().id) || fns:getUser().admin }">

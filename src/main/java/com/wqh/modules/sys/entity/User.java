@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import com.wqh.common.utils.excel.fieldtype.OfficeType;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 
@@ -106,8 +107,8 @@ public class User extends DataEntity<User> {
 	}
 	
 	@JsonIgnore
-	@NotNull(message="归属部门不能为空")
-	@ExcelField(title="归属部门", align=2, sort=25)
+	@NotNull(message="归属机构不能为空")
+	@ExcelField(title="归属机构", align=2, sort=25,fieldType=OfficeType.class)
 	public Office getOffice() {
 		return office;
 	}

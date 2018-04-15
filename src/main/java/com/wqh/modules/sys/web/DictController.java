@@ -119,9 +119,17 @@ public class DictController extends BaseController {
 		LogUtils.saveLog(request, loginfo);
 		dictService.save(dict);
 		addMessage(redirectAttributes, "保存字典'" + dict.getLabel() + "'成功");
-		return "redirect:" + adminPath + "/sys/dict/?repage";
+		return "redirect:" + adminPath + "/sys/dict/list?repage&type="+dict.getType();
 	}
-	
+
+	/**
+	 * 删除字典
+	 * @param dict
+	 * @param type
+	 * @param request
+	 * @param redirectAttributes
+	 * @return
+	 */
 	@RequiresPermissions("sys:dict:del")
 	@RequestMapping(value = "delete")
 	public String delete(Dict dict,String type, HttpServletRequest request, RedirectAttributes redirectAttributes) {
@@ -133,7 +141,10 @@ public class DictController extends BaseController {
 		LogUtils.saveLog(request, loginfo);
 		dictService.delete(dict);
 		addMessage(redirectAttributes, "删除字典成功");
-		return "redirect:" + adminPath + "/sys/dict/?repage";
+		if(StringUtils.isBlank(type)){
+			return "redirect:" + adminPath + "/sys/dict/?repage";
+		}
+		return "redirect:" + adminPath + "/sys/dict/list?repage&type="+dict.getType();
 	}
 	
 	

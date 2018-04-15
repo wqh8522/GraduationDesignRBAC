@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.wqh.common.utils.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.session.InvalidSessionException;
@@ -345,16 +346,22 @@ public class UserUtils {
 		}
 	}
 	/**
-	 * 导出Excel使用，根据名字转换为id
+	 * 导如Excel使用，根据名字转换为id
 	 */
 	public static Office getByOfficeName(String name){
-		Office o = new Office();
-		o.setName(name);
-		List<Office> list = officeDao.findList(o);
-		if(list.size()>0){
-			return list.get(0);
-		}else{
+//		Office o = new Office();
+//		o.setName(name);
+//		List<Office> list = officeDao.findList(o);
+//		if(list.size()>0){
+//			return list.get(0);
+//		}else{
+//			return new Office();
+//		}
+		Office office = officeDao.getByName(name);
+		if(office == null || StringUtils.isBlank(office.getId())){
 			return new Office();
+		}else {
+			return office;
 		}
 	}
 	/**

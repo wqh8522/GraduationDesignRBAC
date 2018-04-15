@@ -338,6 +338,7 @@ public class ImportExcel {
 							val = UserUtils.getByUserName(val.toString());
 						}else if (valType == Office.class){
 							val = UserUtils.getByOfficeName(val.toString());
+							System.out.println(val);
 						}else if (valType == Area.class){
 							val = UserUtils.getByAreaName(val.toString());
 						}else{

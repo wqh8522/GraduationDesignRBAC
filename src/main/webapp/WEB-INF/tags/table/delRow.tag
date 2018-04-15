@@ -33,20 +33,22 @@
         });
         $("#${id} tbody tr td input.i-checks:checkbox").each(function () {
             if (true == $(this).is(':checked')) {
-                str1 += $(this).attr("dictype") + ",";
+                if($(this).attr("dictype") != null && $(this).attr("dictype") != ''){
+                    str1 += $(this).attr("dictype") + ",";
+                }
             }
         });
         if (str.substr(str.length - 1) == ',') {
             ids = str.substr(0, str.length - 1);
         }
-        if (str.substr(str.length - 1) == ',') {
-            types = str1.substr(0, str.length - 1);
+        if (str1.substr(str1.length - 1) == ',') {
+            types = str1.substr(0, str1.length - 1);
         }
         if (ids == "" && types == "") {
             top.layer.alert('请至少选择一条数据!', {icon: 0, title: '警告'});
             return;
         }
-        if (types != null) {
+        if (types != null && types != '') {
             top.layer.confirm('确认要彻底删除数据吗?', {icon: 3, title: '系统提示'}, function (index) {
                 window.location = "${url}?types=" + types;
                 top.layer.close(index);
