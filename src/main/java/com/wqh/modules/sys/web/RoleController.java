@@ -213,7 +213,7 @@ public class RoleController extends BaseController {
             Map<String, Object> map = Maps.newHashMap();
             map.put("id", role.getId());
             map.put("name", role.getName());
-            map.put("isParent", true);
+          //  map.put("isParent", true);
             mapList.add(map);
         }
         return mapList;
