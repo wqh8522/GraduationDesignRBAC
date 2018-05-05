@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wqh.modules.sys.dao.NewsDao">
+    
+	<sql id="NewsColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.title AS "title",
+		a.content AS "content",
+		a.type AS "type"
+	</sql>
+	
+	<sql id="NewsJoins">
+		LEFT JOIN sys_user u ON a.create_by = u.id
+		LEFT JOIN sys_office o ON u.office_id = o.id
+	</sql>
+	
+    
+	<select id="get" resultType="News" >
+		SELECT 
+			<include refid="NewsColumns"/>
+		FROM news a
+		<include refid="NewsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="News" >
+		SELECT 
+			<include refid="NewsColumns"/>,
+		u.name AS "createBy.name",
+		o.name AS "createBy.office.name"
+		FROM news a
+		<include refid="NewsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<!-- 数据范围过滤 -->
+			${sqlMap.dsf}
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="createBy != null">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="office != null and office.id != null and office.id != ''">
+				AND u.office_id = #{office.id}
+			</if>
+			<if test="startDate != null and stopDate != null">
+				AND a.create_date BETWEEN  #{startDate} AND #{stopDate}+1
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="News" >
+		SELECT 
+			<include refid="NewsColumns"/>
+		FROM news a
+		<include refid="NewsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO news(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			title,
+			content,
+			type,
+			file_id
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{title},
+			#{content},
+			#{type},
+			#{fileId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE news SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			title = #{title},
+			content = #{content},
+			type = #{type},
+			file_id = #{fileId}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM news
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE news SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="News" statementType="STATEMENT">
+		select * FROM news  where ${propertyName} = '${value}'
+	</select>
+
+<!--	<select id="newsTj" resultType="NewsTj">
+		SELECT
+			o.id AS "officeId",
+			o.name AS "officeName",
+			o.type AS "type",
+			o.code as "code",
+			nvl(yiyue.coun,'0') AS "yiYue",
+			nvl(eryue.coun,'0') AS "erYue",
+			nvl(sanyue.coun,'0') AS "sanYue",
+			nvl(siyue.coun,'0') AS "siYue",
+			nvl(wuyue.coun,'0') AS "wuYue",
+			nvl(liuyue.coun,'0') AS "liuYue",
+			nvl(qiyue.coun,'0') AS "qiYue",
+			nvl(bayue.coun,'0') AS "baYue",
+			nvl(jiuyue.coun,'0') AS "jiuYue",
+			nvl(shiyue.coun,'0') AS "shiYue",
+			nvl(shiyiyue.coun,'0') AS "shiyiYue",
+			nvl(shieryue.coun,'0') AS "shierYue"
+		  FROM sys_office o
+		  LEFT JOIN sys_user u ON u.office_id = o.id
+		  LEFT JOIN (
+			SELECT
+				o.id officeid,
+				o.name officename,
+				to_char(a.create_date,'yyyy-mm'),
+				count(*) coun
+            from news a
+            left join sys_user u on u.id = a.create_by
+            left join sys_office o on o.id = u.office_id
+            where to_char(a.create_date,'yyyy-mm') = #{year}||'-01'
+            group by o.id,to_char(a.create_date,'yyyy-mm'),o.name
+		  ) yiyue ON  yiyue.officeid = o.id
+		  LEFT JOIN (
+			SELECT
+				o.id officeid,
+				o.name officename,
+				to_char(a.create_date,'yyyy-mm'),
+				count(*) coun
+			from news a
+			left join sys_user u on u.id = a.create_by
+			left join sys_office o on o.id = u.office_id
+		    where to_char(a.create_date,'yyyy-mm') = #{year}||'-02'
+			group by o.id,to_char(a.create_date,'yyyy-mm'),o.name
+		  ) eryue ON  eryue.officeid = o.id
+		  LEFT JOIN (
+			SELECT
+				o.id officeid,
+				o.name officename,
+				to_char(a.create_date,'yyyy-mm'),
+				count(*) coun
+			from news a
+			left join sys_user u on u.id = a.create_by
+			left join sys_office o on o.id = u.office_id
+		    where to_char(a.create_date,'yyyy-mm') = #{year}||'-03'
+			group by o.id,to_char(a.create_date,'yyyy-mm'),o.name
+		  ) sanyue ON  sanyue.officeid = o.id
+		  LEFT JOIN (
+			SELECT
+				o.id officeid,
+				o.name officename,
+				to_char(a.create_date,'yyyy-mm'),
+				count(*) coun
+			from news a
+			left join sys_user u on u.id = a.create_by
+			left join sys_office o on o.id = u.office_id
+		    where to_char(a.create_date,'yyyy-mm') = #{year}||'-04'
+			group by o.id,to_char(a.create_date,'yyyy-mm'),o.name
+		  ) siyue ON  siyue.officeid = o.id
+		  LEFT JOIN (
+			SELECT
+				o.id officeid,
+				o.name officename,
+				to_char(a.create_date,'yyyy-mm'),
+				count(*) coun
+			from news a
+			left join sys_user u on u.id = a.create_by
+			left join sys_office o on o.id = u.office_id
+		    where to_char(a.create_date,'yyyy-mm') = #{year}||'-05'
+			group by o.id,to_char(a.create_date,'yyyy-mm'),o.name
+		  ) wuyue ON  wuyue.officeid = o.id
+		  LEFT JOIN (
+			SELECT
+				o.id officeid,
+				o.name officename,
+				to_char(a.create_date,'yyyy-mm'),
+				count(*) coun
+			from news a
+			left join sys_user u on u.id = a.create_by
+			left join sys_office o on o.id = u.office_id
+		    where to_char(a.create_date,'yyyy-mm') = #{year}||'-06'
+			group by o.id,to_char(a.create_date,'yyyy-mm'),o.name
+		  ) liuyue ON  liuyue.officeid = o.id
+		  LEFT JOIN (
+			SELECT
+				o.id officeid,
+				o.name officename,
+				to_char(a.create_date,'yyyy-mm'),
+				count(*) coun
+			from news a
+			left join sys_user u on u.id = a.create_by
+			left join sys_office o on o.id = u.office_id
+		    where to_char(a.create_date,'yyyy-mm') = #{year}||'-07'
+			group by o.id,to_char(a.create_date,'yyyy-mm'),o.name
+		  ) qiyue ON  qiyue.officeid = o.id
+		  LEFT JOIN (
+			SELECT
+				o.id officeid,
+				o.name officename,
+				to_char(a.create_date,'yyyy-mm'),
+				count(*) coun
+			from news a
+			left join sys_user u on u.id = a.create_by
+			left join sys_office o on o.id = u.office_id
+		    where to_char(a.create_date,'yyyy-mm') = #{year}||'-08'
+			group by o.id,to_char(a.create_date,'yyyy-mm'),o.name
+		  ) bayue ON  bayue.officeid = o.id
+		  LEFT JOIN (
+			SELECT
+				o.id officeid,
+				o.name officename,
+				to_char(a.create_date,'yyyy-mm'),
+				count(*) coun
+			from news a
+			left join sys_user u on u.id = a.create_by
+			left join sys_office o on o.id = u.office_id
+		    where to_char(a.create_date,'yyyy-mm') = #{year}||'-09'
+			group by o.id,to_char(a.create_date,'yyyy-mm'),o.name
+		  ) jiuyue ON  jiuyue.officeid = o.id
+		  LEFT JOIN (
+			SELECT
+				o.id officeid,
+				o.name officename,
+				to_char(a.create_date,'yyyy-mm'),
+				count(*) coun
+			from news a
+			left join sys_user u on u.id = a.create_by
+			left join sys_office o on o.id = u.office_id
+		    where to_char(a.create_date,'yyyy-mm') = #{year}||'-10'
+			group by o.id,to_char(a.create_date,'yyyy-mm'),o.name
+		  ) shiyue ON  shiyue.officeid = o.id
+		  LEFT JOIN (
+			SELECT
+				o.id officeid,
+				o.name officename,
+				to_char(a.create_date,'yyyy-mm'),
+				count(*) coun
+			from news a
+			left join sys_user u on u.id = a.create_by
+			left join sys_office o on o.id = u.office_id
+		    where to_char(a.create_date,'yyyy-mm') = #{year}||'-11'
+			group by o.id,to_char(a.create_date,'yyyy-mm'),o.name
+		  ) shiyiyue ON  shiyiyue.officeid = o.id
+		  LEFT JOIN (
+			SELECT
+				o.id officeid,
+				o.name officename,
+				to_char(a.create_date,'yyyy-mm'),
+				count(*) coun
+			from news a
+			left join sys_user u on u.id = a.create_by
+			left join sys_office o on o.id = u.office_id
+		    where to_char(a.create_date,'yyyy-mm') = #{year}||'-12'
+			group by o.id,to_char(a.create_date,'yyyy-mm'),o.name
+		  ) shieryue ON  shieryue.officeid = o.id
+		  <where>
+			  o.ID != 'c1cb013cc44f479d8caea60d17967bce' AND o.id != '1b43b8d2398540acb7b259b898c43c99'
+			  <if test="officeId != null and officeId != ''">
+				  AND o.id = #{officeId}
+			  </if>
+			  <if test="officeType != null and officeType != ''">
+				  AND o.type = #{officeType}
+			  </if>
+		  </where>
+		  group by o.id,o.name,o.type,yiyue.coun,eryue.coun,sanyue.coun,siyue.coun,wuyue.coun,liuyue.coun,qiyue.coun,bayue.coun,
+		  				jiuyue.coun,shiyue.coun,shiyiyue.coun,shieryue.coun,o.code
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY o.code ASC
+			</otherwise>
+		</choose>
+	</select>-->
+</mapper>
