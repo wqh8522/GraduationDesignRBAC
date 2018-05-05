@@ -79,18 +79,18 @@
 						</shiro:hasPermission>
 						<shiro:hasPermission name="sys:role:edit"> 
 						<c:if test="${(role.sysData eq fns:getDictValue('是', 'yes_no', '1') && fns:getUser().admin)||!(role.sysData eq fns:getDictValue('是', 'yes_no', '1'))}">
-							<a href="#" onclick="openDialog('修改角色', '${ctx}/sys/role/form?id=${role.id}','800px', '500px')" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 修改</a>
+							<a href="#" onclick="openDialog('修改角色[${role.name}]', '${ctx}/sys/role/form?id=${role.id}','800px', '500px')" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 修改</a>
 						</c:if>
 						</shiro:hasPermission>
 						<shiro:hasPermission name="sys:role:del"> 
 						<a href="${ctx}/sys/role/delete?id=${role.id}" onclick="return confirmx('确认要删除该角色吗？', this.href)" class="btn  btn-danger btn-xs"><i class="fa fa-trash"></i> 删除</a>
 						</shiro:hasPermission>
 						<shiro:hasPermission name="sys:role:assign"> 
-						<a href="#" onclick="openDialog('权限设置', '${ctx}/sys/role/auth?id=${role.id}','350px', '600px')" class="btn btn-primary btn-xs" ><i class="fa fa-edit"></i> 权限设置</a>
+						<a href="#" onclick="openDialog('[${role.name}]权限设置', '${ctx}/sys/role/auth?id=${role.id}','350px', '600px')" class="btn btn-primary btn-xs" ><i class="fa fa-edit"></i> 权限设置</a>
 						</shiro:hasPermission>
 						<shiro:hasPermission name="sys:role:assign"> 
 							<c:if test="${(role.createBy.id eq fns:getUser().id) || fns:getUser().admin }">
-								<a href="#" onclick="openDialogView('分配用户', '${ctx}/sys/role/assign?id=${role.id}','800px', '600px')"  class="btn  btn-warning btn-xs" ><i class="glyphicon glyphicon-plus"></i> 分配用户</a>
+								<a href="#" onclick="openDialogView('[${role.name}]分配用户', '${ctx}/sys/role/assign?id=${role.id}','800px', '600px')"  class="btn  btn-warning btn-xs" ><i class="glyphicon glyphicon-plus"></i> 分配用户</a>
 							</c:if>
 						</shiro:hasPermission>
 						</td>
