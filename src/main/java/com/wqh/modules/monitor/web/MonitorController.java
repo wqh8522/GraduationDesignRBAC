@@ -53,11 +53,10 @@ public class MonitorController extends BaseController {
 	
 	@RequestMapping("info")
 	public String info(Model model) throws Exception {
-		Monitor monitor = monitorService.get("1");
-		model.addAttribute("cpu", monitor.getCpu());
-		model.addAttribute("jvm", monitor.getJvm());
-		model.addAttribute("ram", monitor.getRam());
-		model.addAttribute("toEmail", monitor.getToEmail());
+		model.addAttribute("cpu",50);
+		model.addAttribute("jvm", 50);
+		model.addAttribute("ram", 50);
+//		model.addAttribute("toEmail", monitor.getToEmail());
 		return  "modules/monitor/info";
 	}
 	

@@ -71,7 +71,7 @@ public abstract class BaseService {
 									sqlString.append(" OR " + oa + ".id = '" + office.getId() + "'");
 									sqlString.append(" OR " + oa + ".parent_ids LIKE '" + office.getParentIds() + office.getId() + ",%'");
 								}
-							}
+							}///
 						}
 						else if (Role.DATA_SCOPE_OFFICE.equals(r.getDataScope())){
 							sqlString.append(" OR " + oa + ".id = '" + user.getOffice().getId() + "'");

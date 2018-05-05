@@ -71,7 +71,7 @@
 		         <td  class="width-35" ><form:input path="permission" htmlEscape="false" maxlength="100" class="form-control "/>
 					<span class="help-inline">控制器中定义的权限标识，如：@RequiresPermissions("权限标识")</span></td>
 		      </tr>
-		      <tr>
+		      <%--<tr>
 		         <td  class="width-15 active"><label class="pull-right">是否外部连接:</label></td>
 		         <td class="width-35" >
 		         	<form:select path="sfwb"  class="form-control required">
@@ -83,7 +83,7 @@
 		         <td  class="width-35" >
 		         	<form:input path="wblj" htmlEscape="false" maxlength="2000" class="form-control "/>
 		         </td>
-		      </tr>
+		      </tr>--%>
 		      <tr>
 		         <td  class="width-15 active"><label class="pull-right">备注:</label></td>
 		         <td class="width-35" colspan="3"><form:textarea path="remarks" htmlEscape="false" rows="3" maxlength="200" class="form-control "/></td>

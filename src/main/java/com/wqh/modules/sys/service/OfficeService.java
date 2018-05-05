@@ -34,6 +34,7 @@ public class OfficeService extends TreeService<OfficeDao, Office> {
 	
 	@Transactional(readOnly = true)
 	public List<Office> findList(Office office){
+		office.getSqlMap().put("dsf", dataScopeFilter(office.getCurrentUser(), "o", "u", false));
 		office.setParentIds(office.getParentIds()+"%");
 		return dao.findByParentIdsLike(office);
 	}

@@ -153,8 +153,7 @@ public class OfficeController extends BaseController {
 	/**
 	 * 获取机构JSON数据。
 	 * @param extId 排除的ID
-	 * @param type	类型（1：顶级机构；2：顶级机构及以下：3：机构及用户）
-	 * @param grade 显示级别
+	 * @param type	类型
 	 * @param response
 	 * @return
 	 */
@@ -162,15 +161,13 @@ public class OfficeController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "treeData")
 	public List<Map<String, Object>> treeData(@RequestParam(required=false) String extId, @RequestParam(required=false) String type,
-			@RequestParam(required=false) Long grade, @RequestParam(required=false) Boolean isAll, HttpServletResponse response) {
+											  @RequestParam(required=false) Long grade, @RequestParam(required=false) Boolean isAll, HttpServletResponse response) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 		List<Office> list = officeService.findList(isAll);
 		for (int i=0; i<list.size(); i++){
 			Office e = list.get(i);
 			if ((StringUtils.isBlank(extId) || (extId!=null && !extId.equals(e.getId()) && e.getParentIds().indexOf(","+extId+",")==-1))
-					&& (type == null || (type != null && (type.equals("1") ? type.equals(e.getType()) : true)))
-					&& (grade == null || (grade != null && Integer.parseInt(e.getGrade()) <= grade.intValue()))
-					&& Global.YES.equals(e.getUseable())){
+					&& (type == null || (type != null && (type.equals("1") ? type.equals(e.getType()) : true)))){
 				Map<String, Object> map = Maps.newHashMap();
 				map.put("id", e.getId());
 				map.put("pId", e.getParentId());

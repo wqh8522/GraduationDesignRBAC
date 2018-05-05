@@ -139,7 +139,7 @@
 			$('#sendPassBtn').click(function () { 
 				if($("#tel_resetpass").val()=="" || $("#tel_resetpass-error").text()!=""){
 					top.layer.alert("请输入有效的注册手机号码！", {icon: 0});//讨厌的白色字体问题
-					return;
+            return;
 
 				}
 				$("#sendPassBtn").attr("disabled", true); 

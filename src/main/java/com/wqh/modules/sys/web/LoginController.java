@@ -123,15 +123,12 @@ public class LoginController extends BaseController {
             logger.debug("login fail, active session size: {}, message: {}, exception: {}",
                     sessionDAO.getActiveSessions(false).size(), message, exception);
         }
-
         // 非授权异常，登录失败，验证码加1。
         if (!UnauthorizedException.class.getName().equals(exception)) {
             model.addAttribute("isValidateCodeLogin", isValidateCodeLogin(username, true, false));
         }
-
         // 验证失败清空验证码
         request.getSession().setAttribute(ValidateCodeServlet.VALIDATE_CODE, IdGen.uuid());
-
         // 如果是手机登录，则返回JSON字符串
         if (mobile) {
             AjaxJson j = new AjaxJson();
@@ -143,7 +140,6 @@ public class LoginController extends BaseController {
             j.put("JSESSIONID", "");
             return renderString(response, j.getJsonStr());
         }
-
         return "modules/sys/sysLogin";
     }
 
