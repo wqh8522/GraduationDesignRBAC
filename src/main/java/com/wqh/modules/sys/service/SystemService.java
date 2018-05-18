@@ -334,10 +334,10 @@ public class SystemService extends BaseService implements InitializingBean {
 			menu.preInsert();
 			menuDao.insert(menu);
 			
-			if (menu.getSfwb().equals("1") && menu.getHref().indexOf("?cdid=") == -1) {
-				menu.setHref(menu.getHref() + "?cdid=" + menu.getId());
-			}
-			menuDao.update(menu);
+//			if (menu.getSfwb().equals("1") && menu.getHref().indexOf("?cdid=") == -1) {
+//				menu.setHref(menu.getHref() + "?cdid=" + menu.getId());
+//			}
+//			menuDao.update(menu);
 		}else{
 			menu.preUpdate();
 			menuDao.update(menu);

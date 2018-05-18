@@ -80,22 +80,27 @@ public class MenuController extends BaseController {
 	@RequiresPermissions(value={"sys:menu:add","sys:menu:edit"},logical=Logical.OR)
 	@RequestMapping(value = "save")
 	public String save(Menu menu, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request) {
-		if(!UserUtils.getUser().isAdmin()){
-			addMessage(redirectAttributes, "越权操作，只有超级管理员才能添加或修改数据！");
-			return "redirect:" + adminPath + "/sys/role/?repage";
+		try {
+			if(!UserUtils.getUser().isAdmin()){
+				addMessage(redirectAttributes, "越权操作，只有超级管理员才能添加或修改数据！");
+				return "redirect:" + adminPath + "/sys/role/?repage";
+			}
+			if (!beanValidator(model, menu)){
+				return form(menu, model);
+			}
+			systemService.saveMenu(menu);
+			String loginfo = "";
+			if (menu.getIsNewRecord()) {
+				loginfo = "新增菜单["+ menu.getName() +"]";
+			} else {
+				loginfo = "修改菜单["+ menu.getName() +"]";
+			}
+			LogUtils.saveLog(request, loginfo);
+			addMessage(redirectAttributes, "保存菜单'" + menu.getName() + "'成功");
+		}catch (Exception e){
+			e.printStackTrace();
 		}
-		if (!beanValidator(model, menu)){
-			return form(menu, model);
-		}
-		systemService.saveMenu(menu);
-		String loginfo = "";
-		if (menu.getIsNewRecord()) {
-			loginfo = "新增菜单["+ menu.getName() +"]";
-		} else {
-			loginfo = "修改菜单["+ menu.getName() +"]";
-		}
-		LogUtils.saveLog(request, loginfo);
-		addMessage(redirectAttributes, "保存菜单'" + menu.getName() + "'成功");
+
 		return "redirect:" + adminPath + "/sys/menu/";
 	}
 	

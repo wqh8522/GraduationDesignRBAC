@@ -56,9 +56,9 @@
 			<%--<shiro:hasPermission name="dzjg:news:import">
 				<table:importExcel url="${ctx}/dzjg/news/import"></table:importExcel><!-- 导入按钮 -->
 			</shiro:hasPermission>--%>
-			<shiro:hasPermission name="dzjg:news:export">
+			<%--<shiro:hasPermission name="dzjg:news:export">
 	       		<table:exportExcel url="${ctx}/news/export"></table:exportExcel><!-- 导出按钮 -->
-	       	</shiro:hasPermission>
+	       	</shiro:hasPermission>--%>
 	       <button class="btn btn-white btn-sm " data-toggle="tooltip" data-placement="left" onclick="sortOrRefresh()" title="刷新"><i class="glyphicon glyphicon-repeat"></i> 刷新</button>
 		
 			</div>

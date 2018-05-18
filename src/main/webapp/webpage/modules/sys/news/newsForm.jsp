@@ -43,38 +43,6 @@
 					}
 				}
 			});
-            //初始化文本编辑器
-            layui.use('layedit', function () {
-                layedit = layui.layedit;
-                edit = layedit.build('edit_Content', {
-                    height: 250 //设置编辑器高度
-                    ,
-                    tool: [
-                        'strong' //加粗
-                        , 'italic' //斜体
-                        , 'underline' //下划线
-                        , 'del' //删除线
-                        , '|' //分割线
-                        , 'left' //左对齐
-                        , 'center' //居中对齐
-                        , 'right' //右对齐
-                        , '|' //分割线
-                        , 'link' //超链接
-                        , 'unlink' //清除链接
-                        //, 'face' //表情
-                        //, 'image' //插入图片
-                        //, 'help' //帮助
-                    ]
-                }); //建立编辑器
-
-                //layedit.set({
-                //    uploadImage: {
-                //        url: responseUrl.uploadImage //接口url
-                //        ,
-                //        type: 'post' //默认post
-                //    }
-                //});
-            });
 		});
 	</script>
 </head>
@@ -106,8 +74,7 @@
 				   <td class="width-15 active"><label class="pull-right"><font color="red">*</font>新闻正文：</label></td>
 				   <td class="width-35" colspan="3">
 					  <%-- <form:textarea path="content" htmlEscape="false" rows="4"    class="form-control required"/>--%>
-						  <input type="hidden" id="content" value="" name="content">
-						  <textarea name="edit_Content" id="edit_Content" >${news.content}</textarea>
+						  <textarea name="content" id="content" rows="5" class="form-control required">${news.content}</textarea>
 
 				   </td>
 			   </tr>
